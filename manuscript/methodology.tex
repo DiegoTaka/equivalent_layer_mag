@@ -1,0 +1,784 @@
+\section{Methodology}
+
+%======================================================================================
+\subsection{Classical equivalent layer for magnetic data}
+%======================================================================================
+
+Let $\mathbf{d}^{o}$ be the $N \times 1$ observed data vector $(x_{i}, y_{i}, z_{i})$, $i =  1, \dots, N $,
+whose $i$th element is the total-field anomaly $d^{o}_{i}$ produced by arbitrarily magnetized sources
+aranged in a right-handed Cartesian coordinate system with $x$-, $y$- and $z$-axis 
+pointing to north, east and down, respectively.
+We consider that the total-field anomaly data $d^{o}_{i}$ represent the discrete
+values of a harmonic function. Besides, we consider that the main geomagnetic field 
+direction is constant at the limited study area and can be defined by the unit vector
+\begin{equation}
+\hat{\mathbf{F}} = \begin{bmatrix}
+F_x \\
+F_y \\
+F_z
+\end{bmatrix} =
+\begin{bmatrix}
+\cos(I_{0}) \, \cos(D_{0}) \\
+\cos(I_{0}) \, \sin(D_{0}) \\
+\sin(I_{0})
+\end{bmatrix} \: ,
+\label{eq:unit_vector_F}
+\end{equation}
+with constant inclination $I_{0}$ and declination $D_{0}$.
+In this case, $d^{o}_{i}$ can be approximated by the predicted total-field anomaly
+\begin{equation}
+\Delta T_{i} = \sum_{j=1}^{M} \, p_{j} a_{ij} \: ,
+\label{eq:integral-sum_mag}
+\end{equation}
+which describes the magnetic induction exerted at the observation point,
+by a discrete layer of $M$ dipoles (equivalent sources) defined on the horizontal plane $z = z_{c}$, 
+where $p_{j}$ is the magnetic moment intensity (in A~m~$^{2}$)~of the $j$th dipole, 
+that has unit volume and is located at the point $(x_{j}, y_{j}, z_{c})$. In equation
+\ref{eq:integral-sum_mag}, $a_{ij}$ is the harmonic function
+\begin{equation}
+a_{ij}
+= c_{m} \, \frac{\mu_{0}}{4\pi} \, \hat{\mathbf{F}}^{\top} \mathbf{H}_{ij} \: \hat{\mathbf{u}} \: ,
+\label{eq:aij_mag}
+\end{equation}
+the unit vector
+\begin{equation}
+\hat{\mathbf{u}} = \begin{bmatrix}
+u_x \\
+u_y \\
+u_z
+\end{bmatrix} =
+\begin{bmatrix}
+\cos(I) \, \cos(D) \\
+\cos(I) \, \sin(D) \\
+\sin(I)
+\end{bmatrix} \: ,
+\label{eq:u_hat}
+\end{equation}
+defines the magnetization direction of all dipoles, with constant inclination $I$ and declination $D$,
+$\mu_{0} = 4\pi \, 10^{-7}$ H/m is the magnetic constant, $c_{m} = 10^{9}$ is a factor that transforms
+the magnetic induction from Tesla (T) to nanotesla (nT) and $\mathbf{H}_{ij}$ is a $3 \times 3$ matrix 
+\begin{equation}
+\mathbf{H}_{ij} = \begin{bmatrix}
+h^{xx}_{ij} & h^{xy}_{ij} & h^{xz}_{ij} \\
+h^{xy}_{ij} & h^{yy}_{ij} & h^{yz}_{ij} \\
+h^{xz}_{ij} & h^{yz}_{ij} & h^{zz}_{ij}
+\end{bmatrix} \: ,
+\label{eq:Hij}
+\end{equation}
+where 
+\begin{equation}
+h^{\alpha\beta}_{ij} = 
+\begin{cases}
+\frac{3 \left( \alpha_{i} - \alpha_{j} \right)^{2}}{r_{ij}^{5}} - \frac{1}{r_{ij}^{3}} \: , \quad \alpha = \beta \\
+\frac{3 \left( \alpha_{i} - \alpha_{j} \right) \left( \beta_{i} - \beta_{j} \right)}{r_{ij}^{5}} \: , \quad \alpha \ne \beta
+\end{cases} \: , \quad \alpha, \beta = x, y, z \: ,
+\label{eq:hij_alpha_beta}
+\end{equation}
+are the second derivatives of the inverse distance function
+\begin{equation}
+\frac{1}{r_{ij}} = 
+\frac{1}{\sqrt{\left(x_{i} - x_{j} \right)^{2} + 
+\left(y_{i} - y_{j} \right)^{2} + \left(z_{i} - z_{c} \right)^{2}}}
+\label{eq:1_rij}
+\end{equation}
+with respect to the coordinates of the observation point $(x_{i}, y_{i}, z_{i})$.
+
+Equation \ref{eq:integral-sum_mag} can be rewritten in matrix notation as follows:
+\begin{equation}
+\mathbf{d}(\mathbf{p}) = \mathbf{A} \mathbf{p} \: ,
+\label{eq:predicted-data-vector_mag}
+\end{equation}
+where $\mathbf{d}(\mathbf{p})$ is the $N \times 1$ predicted data vector with $i$th element defined
+as the predicted total-field anomaly $\Delta T_{i}$ (equation \ref{eq:integral-sum_mag}),
+$\mathbf{p}$ is the $M \times 1$ parameter vector whose $j$th element is the magnetic moment intensity
+$p_{j}$ of the $j$th dipole and $\mathbf{A}$ is the $N \times M$ sensitivity matrix with element 
+$ij$ defined by the harmonic function $a_{ij}$ (equation \ref{eq:aij_mag}).
+In the classical equivalent-layer technique, the common approach for 
+estimating the parameter vector $\mathbf{p}$ from the observed 
+total-field anomaly data $\mathbf{d}^{o}$ is solving the least-squares normal equations
+\begin{equation}
+\mathbf{A}^{\top}\mathbf{A} \: \mathbf{p} = 
+\mathbf{A}^{\top} \mathbf{d}^{o} \: .
+\label{eq:normal-equations}
+\end{equation}
+Equation \ref{eq:normal-equations} is usually solved by first computing the Cholesky 
+factor $\mathbf{G}$ of the positive-definite matrix $\mathbf{A}^{\top}\mathbf{A}$ and then using it to solve the linear 
+systems \citep[][ p. 262]{golub-vanloan2013}:
+\begin{equation}
+\begin{split}
+\mathbf{G} \mathbf{w} &= \mathbf{A}^{\top}\mathbf{d}^{o} \\
+\mathbf{G}^{\top} \tilde{\mathbf{p}} &= \mathbf{w}
+\end{split} \: ,
+\label{eq:classical-method}
+\end{equation}
+where $\mathbf{w}$ is a temporarily variable.
+This approach to estimating the parameter vector will be 
+referenced throughout this work as the \textit{classical method}.
+The computational cost associated with the classical method can be very high
+when dealing with large datasets. In the following subsections, we will show how to 
+explore the structure of the sensitivity matrix $\mathbf{A}$ and 
+efficiently solve the least-squares normal equations (equation \ref{eq:normal-equations}).
+
+
+%=====================================================================================================
+\subsection{Matrix $\mathbf{A}$ in terms of matrix components $\mathbf{A_{\boldsymbol{\alpha\beta}}}$}
+%=====================================================================================================
+
+To access the structure of the sensitivity matrix $\mathbf{A}$ 
+(equation \ref{eq:predicted-data-vector_mag}), let us first rewrite its elements 
+$a_{ij}$ (equation \ref{eq:aij_mag}) in the following way:
+\begin{equation}
+\begin{split}
+a_{ij} = a^{xx}_{ij} + a^{xy}_{ij} + a^{xz}_{ij} + a^{yy}_{ij} + a^{yz}_{ij} + a^{zz}_{ij} \: ,
+\end{split}
+\label{eq:aij_mag_expand}
+\end{equation}
+where
+\begin{equation}
+a^{\alpha\beta}_{ij} = 
+\begin{cases}
+c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{\alpha} u_{\beta} \right) h^{\alpha\beta}_{ij} \: &, \quad \alpha = \beta \\
+c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{\alpha} u_{\beta} + F_{\beta} u_{\alpha} \right) h^{\alpha\beta}_{ij} \: &, \quad \alpha \ne \beta \\
+\end{cases}
+\: , \quad \alpha, \beta = x, y, z \: ,
+\label{eq:aij_alpha_beta}
+\end{equation}
+are defined by the elements of $\hat{\mathbf{F}}$ 
+(equation \ref{eq:unit_vector_F}), $\hat{\mathbf{u}}$ (equation \ref{eq:u_hat}) and 
+$\mathbf{H}_{ij}$ (equations \ref{eq:Hij} and \ref{eq:hij_alpha_beta}).
+Then, we can rewrite the sensitivity matrix $\mathbf{A}$ 
+(equation \ref{eq:predicted-data-vector_mag}) according to:
+\begin{equation}
+\mathbf{A} = \mathbf{A_{xx}} + \mathbf{A_{xy}} + \mathbf{A_{xz}} + 
+\mathbf{A_{yy}} + \mathbf{A_{yz}} + \mathbf{A_{zz}} \: ,
+\label{eq:A_expand}
+\end{equation}
+where $\mathbf{A_{\boldsymbol{\alpha\beta}}}$ are $N \times M$ matrices with elements 
+$ij$ defined by $a^{\alpha\beta}_{ij}$ (equation \ref{eq:aij_alpha_beta}).
+
+Now we can define the structure of $\mathbf{A}$ in terms of its components 
+$\mathbf{A_{\boldsymbol{\alpha\beta}}}$ (equation \ref{eq:A_expand}). To do this, 
+we consider the particular case in which the observed total-field anomaly is located 
+on an $N_{x} \times N_{y}$ 
+regular grid of points spaced by $\Delta_{x}$ and $\Delta_{y}$ along the $x$- and $y$-directions,
+respectively, on a constant vertical coordinate $z_{0}$. We also consider that the equivalent layer
+is aranged such that one dipole is located right below each observation point, at a constant coordinate $z_{c}$.
+In this case, the number of equivalent sources $M$ is equal to the number of data $N$ and, 
+consequently, matrices $\mathbf{A}$ and $\mathbf{A_{\boldsymbol{\alpha\beta}}}$ become 
+square ($N \times N$). 
+Besides, the horizontal coordinates $x_{i}$ and $y_{i}$ of the observation points 
+can be defined by
+\begin{equation}
+x_{i} = x_{1} + \left[ k(i) - 1 \right] \, \Delta_{x}
+\label{eq:xi}
+\end{equation}
+and
+\begin{equation}
+y_{i} = y_{1} + \left[ l(i) - 1 \right] \, \Delta_{y} \: ,
+\label{eq:yi}
+\end{equation}
+where $x_{1}$ and $y_{1}$ are the start grid coordinates for $x_{i}$ and $y_{i}$, respectively,
+and $k(i)$ and $l(i)$ are integer functions defined according to the orientation
+of the data grid (Figure \ref{fig:regular-grids}). 
+For $x$-\textit{oriented grids}, the integer functions are given by
+\begin{equation}
+k(i)  = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} + N_{x}
+\label{eq:k-x-oriented}
+\end{equation}
+and
+\begin{equation}
+l(i) = \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil \: .
+\label{eq:l-x-oriented}
+\end{equation}
+For $y$-\textit{oriented grids}, the integer functions are given by
+\begin{equation}
+k(i) = \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil
+\label{eq:k-y-oriented}
+\end{equation}
+and
+\begin{equation}
+l(i) = i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{y} + N_{y} \: .
+\label{eq:l-y-oriented}
+\end{equation}
+In equations \ref{eq:k-x-oriented}--\ref{eq:l-y-oriented}, $\lceil \cdot \rceil$ denotes the ceiling 
+function \citep[e.g.,][ p. 67-68]{graham-etal1994}.
+Equations \ref{eq:xi}--\ref{eq:l-y-oriented} can also be used to define the coordinates 
+$x_{j}$ and $y_{j}$ of the equivalent sources, but with index $j$ instead of $i$.
+
+By using equations \ref{eq:xi}--\ref{eq:l-y-oriented} to define the coordinates $x_{i}$ and 
+$y_{i}$ of the observation points and $x_{j}$ and $y_{j}$ of the equivalent sources, we can
+rewrite the elements $h^{\alpha\beta}_{ij}$ (equation \ref{eq:hij_alpha_beta}) of matrix 
+$\mathbf{H}_{ij}$ (equation \ref{eq:Hij}) as follows:
+\begin{equation}
+h^{xx}_{ij} = 
+\frac{3 \left( \Delta k_{ij} \, \Delta_{x} \right)^{2}}{r_{ij}^{5}} - \frac{1}{r_{ij}^{3}} \: ,
+\label{eq:hxx_regular}
+\end{equation}
+\begin{equation}
+h^{yy}_{ij} = 
+\frac{3 \left( \Delta l_{ij} \, \Delta_{y} \right)^{2}}{r_{ij}^{5}} - \frac{1}{r_{ij}^{3}} \: ,
+\label{eq:hyy_regular}
+\end{equation}
+\begin{equation}
+h^{zz}_{ij} = 
+\frac{3 \Delta_{z}^{2}}{r_{ij}^{5}} - \frac{1}{r_{ij}^{3}} \: ,
+\label{eq:hzz_regular}
+\end{equation}
+\begin{equation}
+h^{xy}_{ij} = 
+\frac{3 \left( \Delta k_{ij} \, \Delta_{x} \right)\left( \Delta l_{ij} \, \Delta_{y} \right)}{r_{ij}^{5}} \: ,
+\label{eq:hxy_regular}
+\end{equation}
+\begin{equation}
+h^{xz}_{ij} = 
+\frac{3 \left( \Delta k_{ij} \, \Delta_{x} \right) \Delta_{z}}{r_{ij}^{5}}
+\label{eq:hxz_regular}
+\end{equation}
+and
+\begin{equation}
+h^{yz}_{ij} = 
+\frac{3 \left( \Delta l_{ij} \, \Delta_{y} \right) \Delta_{z}}{r_{ij}^{5}} \: ,
+\label{eq:hyz_regular}
+\end{equation}
+where $\Delta_{z} = z_{c} - z_{0}$, 
+\begin{equation}
+\Delta k_{ij} = \frac{x_{i} - x_{j}}{\Delta_{x}} = k(i) - k(j) \: ,
+\label{eq:Delta_kij}
+\end{equation}
+\begin{equation}
+\Delta l_{ij} = \frac{y_{i} - y_{j}}{\Delta_{y}} = l(i) - l(j)
+\label{eq:Delta_lij}
+\end{equation}
+and 
+\begin{equation}
+\frac{1}{r_{ij}} = 
+\frac{1}{\sqrt{\left( \Delta k_{ij} \, \Delta_{x} \right)^{2} + \left( \Delta l_{ij} \, \Delta_{y} \right)^{2} + \Delta_{z}^{2}}} \: .
+\label{eq:1_rij_regular}
+\end{equation}
+Note that the integer functions $k(i)$, $k(j)$, $l(i)$ and $l(j)$ (equations 
+\ref{eq:k-x-oriented}--\ref{eq:l-y-oriented}) defining $\Delta k_{ij}$ (equation
+\ref{eq:Delta_kij}), $\Delta l_{ij}$ (equation \ref{eq:Delta_lij}) and 
+$\tfrac{1}{r_{ij}}$ (equation \ref{eq:1_rij_regular}) assume different 
+forms depending on the defined grid orientation.
+Despite of that, it can be shown that
+\begin{equation}
+\Delta k_{ij} = - \Delta k_{ji} \: ,
+\label{eq:Delta_kij_symmetry}
+\end{equation}
+\begin{equation}
+\Delta l_{ij} = - \Delta l_{ji}
+\label{eq:Delta_lij_symmetry}
+\end{equation}
+and 
+\begin{equation}
+\frac{1}{r_{ij}} = \frac{1}{r_{ji}}
+\label{eq:1_rij_symmetry}
+\end{equation}
+for any grid orientation.
+
+%=================================================================================
+\subsection{General structure of matrices $\mathbf{A_{\boldsymbol{\alpha\beta}}}$}
+%=================================================================================
+
+By using equations \ref{eq:hxx_regular}--\ref{eq:1_rij_regular} to compute 
+$a^{\alpha\beta}_{ij}$ (equation \ref{eq:aij_alpha_beta}), we can show that 
+matrices $\mathbf{A_{\boldsymbol{\alpha\beta}}}$ (equation \ref{eq:A_expand}) assume
+well-defined structures that can be conveniently
+represented with \textit{block indices} $q$ and $p$ \citep{takahashi2020convolutional}.
+These indices are defined by the integer functions $\Delta k_{ij}$ and $\Delta l_{ij}$ 
+(equations \ref{eq:Delta_kij} and \ref{eq:Delta_lij}) in terms of the indices $i$ 
+of the observation points $(x_{i}, y_{i}, z_{0})$ and $j$ of the equivalent sources
+$(x_{j}, y_{j}, z_{c})$.
+For $x$-\textit{oriented grids} (Figure \ref{fig:regular-grids}), $Q = N_{y}$, $P = N_{x}$ 
+and the block indices $q$ and $p$ are given by:
+\begin{equation}
+q \equiv q(i, j) = \Delta l_{ij}
+\label{eq:q-x-oriented}
+\end{equation}
+and
+\begin{equation}
+p \equiv p(i, j) = \Delta k_{ij} \: ,
+\label{eq:p-x-oriented}
+\end{equation}
+where $\Delta k_{ij}$ and $\Delta l_{ij}$ (equations \ref{eq:Delta_kij} and \ref{eq:Delta_lij}) 
+are defined by integer functions $k(i)$, $k(j)$, $l(i)$ and $l(j)$ given by equations 
+\ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}.
+For $y$-\textit{oriented grids} (Figure \ref{fig:regular-grids}), $Q = N_{x}$, $P = N_{y}$ and 
+the block indices $q$ and $p$ are given by:
+\begin{equation}
+q \equiv q(i, j) = \Delta k_{ij}
+\label{eq:q-y-oriented}
+\end{equation}
+and
+\begin{equation}
+p \equiv p(i, j) = \Delta l_{ij} \: ,
+\label{eq:p-y-oriented}
+\end{equation}
+where $\Delta k_{ij}$ and $\Delta l_{ij}$ (equations \ref{eq:Delta_kij} and \ref{eq:Delta_lij}) 
+are defined by integer functions $k(i)$, $k(j)$, $l(i)$ and $l(j)$ given by equations 
+\ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}.
+Equations \ref{eq:q-x-oriented}--\ref{eq:p-y-oriented} show that $q$ varies from $-Q+1$
+to $Q-1$ and $p$ from $-P+1$ to $P-1$, regardless of the grid orientation. Notice these equations differ 
+from those presented by \citet{takahashi2020convolutional} by not being represented as the absolute values.
+
+% in review ==========>
+
+Let us consider the small regular grid of $N_{x} = 3$ and $N_{y} = 2$ points shown by
+Figure \ref{fig:regular-grids}. This grid may represent observation points 
+$(x_{i}, y_{i}, z_{0})$ with constant vertical coordinate $z_{0}$ or equivalent sources
+$(x_{j}, y_{j}, z_{c})$ with constant vertical coordinate $z_{c} > z_{0}$. In both cases,
+the horizontal coordinates are defined by equations \ref{eq:xi} and \ref{eq:yi}.
+Given an index $i$, associated with an observation point, and an index $j$, associated with
+an equivalent source, we can compute $\Delta k_{ij}$ (equation \ref{eq:Delta_kij}), 
+$\Delta l_{ij}$ (equation \ref{eq:Delta_lij}) and $\tfrac{1}{r_{ij}}$ 
+(equation \ref{eq:1_rij_regular}). The matrices $\Delta\mathbf{K}$ and $\Delta\mathbf{L}$ 
+having elements $ij$ 
+defined by $\Delta k_{ij}$ and $\Delta l_{ij}$, respectively, assume different forms, depending on
+the grid orientation. For $x$-oriented grids (Figure \ref{fig:regular-grids}), they are given by:
+\begin{equation}
+\Delta\mathbf{K} = \begin{bmatrix}
+0 &  -1 &  -2 &   0 &  -1 &  -2 \\
+1 &   0 &  -1 &   1 &   0 &  -1 \\
+2 &   1 &   0 &   2 &   1 &   0 \\
+0 &  -1 &  -2 &   0 &  -1 &  -2 \\
+1 &   0 &  -1 &   1 &   0 &  -1 \\
+2 &   1 &   0 &   2 &   1 &   0 \\
+\end{bmatrix}
+\label{eq:DK-matrix-x-oriented}
+\end{equation}
+and
+\begin{equation}
+\Delta\mathbf{L} = \begin{bmatrix}
+0 &   0 &   0 &  -1 &  -1 &  -1 \\
+0 &   0 &   0 &  -1 &  -1 &  -1 \\
+0 &   0 &   0 &  -1 &  -1 &  -1 \\
+1 &   1 &   1 &   0 &   0 &   0 \\
+1 &   1 &   1 &   0 &   0 &   0 \\
+1 &   1 &   1 &   0 &   0 &   0 \\
+\end{bmatrix} \: .
+\label{eq:DL-matrix-x-oriented}
+\end{equation}
+For $y$-oriented grids (Figure \ref{fig:regular-grids}), they are given by:
+\begin{equation}
+\Delta\mathbf{K} = \begin{bmatrix}
+0 &   0 &  -1 &  -1 &  -2 &  -2 \\
+0 &   0 &  -1 &  -1 &  -2 &  -2 \\
+1 &   1 &   0 &   0 &  -1 &  -1 \\
+1 &   1 &   0 &   0 &  -1 &  -1 \\
+2 &   2 &   1 &   1 &   0 &   0 \\
+2 &   2 &   1 &   1 &   0 &   0 \\
+\end{bmatrix}
+\label{eq:DK-matrix-y-oriented}
+\end{equation}
+and
+\begin{equation}
+\Delta\mathbf{L} = \begin{bmatrix}
+0 &  -1 &   0 &  -1 &   0 &  -1 \\
+1 &   0 &   1 &   0 &   1 &   0 \\
+0 &  -1 &   0 &  -1 &   0 &  -1 \\
+1 &   0 &   1 &   0 &   1 &   0 \\
+0 &  -1 &   0 &  -1 &   0 &  -1 \\
+1 &   0 &   1 &   0 &   1 &   0 \\
+\end{bmatrix} \: .
+\label{eq:DL-matrix-y-oriented}
+\end{equation}
+For example, consider the matrix coordinates $x_{5}, y_{5}$ for the observation point and $x_{3}, y_{3}$ for the source in a $x$-oriented grid, these are defined by the matrix index $i = 5$ and $j = 3$.
+Using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented} the grid indices $k(i) = 2$, $l(i) = 2$ and $k(j) = 3$, $l(j) = 1$ can be calculated. Equations \ref{eq:Delta_kij} and \ref{eq:Delta_lij} define $\Delta k_{ij} = -1$ and $\Delta l_{ij} = 1$, which represents the the value in the fifth row and third column of matrices $\Delta\mathbf{K}$ and $\Delta\mathbf{L}$ (equations \ref{eq:DK-matrix-x-oriented} and \ref{eq:DL-matrix-x-oriented}), respectively. Using the matrix coordinates $x_{4}$ ($y_{4}$) for the observation point and $x_{2}$ ($y_{2}$) for the source, lead us to the same values for $\Delta k_{ij}$ and $\Delta l_{ij}$ (fourth row and second column of equations \ref{eq:DK-matrix-x-oriented} and \ref{eq:DL-matrix-x-oriented}).
+These examples (equations \ref{eq:DK-matrix-x-oriented}--\ref{eq:DL-matrix-y-oriented})
+show that different combinations of indices $i$ and $j$ result in integer functions 
+$\Delta k_{ij}$ and $\Delta l_{ij}$ (equations \ref{eq:Delta_kij} and \ref{eq:Delta_lij}) 
+having the same numerical value. In these cases, not only the numerical values of
+the corresponding elements $a^{\alpha\beta}_{ij}$ (equation \ref{eq:aij_alpha_beta}),
+but also their associated block indices $q$ and $p$ (equations 
+\ref{eq:q-x-oriented}--\ref{eq:p-y-oriented}) are the same.
+The contrary is also true: if the elements $a^{\alpha\beta}_{ij}$ have different 
+associated block indices $q$ and $p$, they also have different numerical values.
+Because of that, using the alternative notation $a^{\alpha\beta}_{qp}$ to define the elements 
+$a^{\alpha\beta}_{ij}$ in terms of its associated block indices $q$ and $p$ is a good
+approach to investigating the structure of a given matrix component 
+$\mathbf{A_{\boldsymbol{\alpha\beta}}}$ (equation \ref{eq:A_expand}).
+This approach allows identifying elements $a^{\alpha\beta}_{ij}$ having the same numerical
+value only by inspecting their associated block indices.
+
+Note that for $x$-oriented grids, matrices $\Delta\mathbf{K}$ (equation \ref{eq:DK-matrix-x-oriented})
+and $\Delta\mathbf{L}$ (equation \ref{eq:DL-matrix-x-oriented}) define the block indices
+$p$ (equation \ref{eq:p-x-oriented}) and $q$ (equation \ref{eq:q-x-oriented}), respectively.
+In this case, they are composed of $Q \times Q$ blocks with $P \times P$ elements each, where 
+$Q = N_{y}$ and $P = N_{x}$. 
+For $y$-oriented grids, matrices $\Delta\mathbf{K}$ (equation \ref{eq:DK-matrix-y-oriented})
+and $\Delta\mathbf{L}$ (equation \ref{eq:DL-matrix-y-oriented}) define the block indices
+$q$ (equation \ref{eq:q-y-oriented}) and $p$ (equation \ref{eq:p-y-oriented}), respectively.
+In this case, they are also composed of $Q \times Q$ blocks with $P \times P$ elements each, 
+but now $Q = N_{x}$ and $P = N_{y}$.
+The examples shown by equations \ref{eq:DK-matrix-x-oriented}--\ref{eq:DL-matrix-y-oriented}
+also illustrate that, regardless of grid orientation, (i) the block index $q$ is constant 
+inside each block; (ii) blocks disposed along the same block diagonal are equal to each other; 
+(iii) the block index $p$ is constant on each diagonal of a given block; 
+(iv) elements of a given block located on the same diagonal are also equal do each other.
+The results obtained with the small grid shown in Figure \ref{fig:regular-grids}
+can be easily generalized for larger grids.
+Based on the well-defined structure of block indices, we can define 
+matrices $\mathbf{A_{\boldsymbol{\alpha\beta}}}$ in a general form
+\begin{equation}
+\mathbf{A}_{\boldsymbol{\alpha\beta}} = \begin{bmatrix}
+\mathbf{A}_{\boldsymbol{\alpha\beta}}^{0}   & \mathbf{A}_{\boldsymbol{\alpha\beta}}^{-1} & \cdots          & \mathbf{A}_{\boldsymbol{\alpha\beta}}^{-Q+1} \\
+\mathbf{A}_{\boldsymbol{\alpha\beta}}^{1}   & \ddots          & \ddots          & \vdots           \\ 
+\vdots           & \ddots          & \ddots          & \mathbf{A}_{\boldsymbol{\alpha\beta}}^{-1}   \\
+\mathbf{A}_{\boldsymbol{\alpha\beta}}^{Q-1} & \cdots          & \mathbf{A}_{\boldsymbol{\alpha\beta}}^{1}  & \mathbf{A}_{\boldsymbol{\alpha\beta}}^{0}
+\end{bmatrix}_{N \times N} \: ,
+\label{eq:BTTB_A_alpha_beta}
+\end{equation}
+with blocks $\mathbf{A}_{\boldsymbol{\alpha\beta}}^{q}$, $q = -Q+1, \dots, Q-1$, given by
+\begin{equation}
+\mathbf{A}_{\boldsymbol{\alpha\beta}}^{q} = \begin{bmatrix}
+a^{\alpha\beta}_{q0}   & a^{\alpha\beta}_{q(-1)} & \cdots  & a^{\alpha\beta}_{q(-P+1)} \\
+a^{\alpha\beta}_{q1}   & \ddots     & \ddots  & \vdots       \\ 
+\vdots      & \ddots     & \ddots  & a^{\alpha\beta}_{q(-1)}   \\
+a^{\alpha\beta}_{q(P-1)} & \cdots     & a^{\alpha\beta}_{q1}  & a^{\alpha\beta}_{q0}
+\end{bmatrix}_{P \times P} \: ,
+\label{eq:Aq_block}
+\end{equation}
+formed by elements $a^{\alpha\beta}_{qp}$, $p = -P+1, \dots, P-1$.
+This well-defined structure (equations \ref{eq:BTTB_A_alpha_beta} and \ref{eq:Aq_block}) 
+of matrix components $\mathbf{A_{\boldsymbol{\alpha\beta}}}$ 
+(equation \ref{eq:A_expand}) is called Block-Toeplitz Toeplitz-Block (BTTB) 
+\citep[e.g., ][ p. 67]{chan-jin2007}.
+
+%=====================================================================================================
+\subsection{Detailed structure of matrices $\mathbf{A_{xx}}$, $\mathbf{A_{yy}}$ and $\mathbf{A_{zz}}$}
+%=====================================================================================================
+
+Equations \ref{eq:BTTB_A_alpha_beta} and \ref{eq:Aq_block} define the general BTTB
+structure of all matrix components $\mathbf{A_{\boldsymbol{\alpha\beta}}}$, but 
+there are some differences between them.
+Let us consider the matrix component $\mathbf{A}_{\boldsymbol{xx}}$, with elements
+$a^{xx}_{ij}$ (equation \ref{eq:aij_alpha_beta}) defined by the second derivative calculated in
+$h^{xx}_{ij}$ (equation \ref{eq:hxx_regular}). It can be easily verified from equations
+\ref{eq:Delta_kij_symmetry} and \ref{eq:1_rij_symmetry} that $h^{xx}_{ij} = h^{xx}_{ji}$.
+As a consequence, $a^{xx}_{ij} = a^{xx}_{ji}$, which means that 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xx}} = \left( \mathbf{A}_{\boldsymbol{xx}} \right)^{\top}
+\label{eq:Axx_symmetry}
+\end{equation}
+for any grid orientation.
+Now, let us investigate the elements $a^{xx}_{qp}$ forming the blocks $\mathbf{A}_{\boldsymbol{xx}}^{q}$.
+For $x$-oriented grids (Figure \ref{fig:regular-grids}), the block indices $q$ and $p$ are defined 
+by equations \ref{eq:q-x-oriented} and 
+\ref{eq:p-x-oriented} and $a^{xx}_{qp}$ can be rewritten as follows:
+\begin{equation}
+a^{xx}_{qp} = c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{x} u_{x} \right) \frac{3 \left( p \, \Delta_{x} \right)^{2}}{r_{qp}^{5}} - 
+\frac{1}{r_{qp}^{3}} \: ,
+\label{eq:aqp_xx_x_oriented}
+\end{equation}
+where
+\begin{equation}
+\frac{1}{r_{qp}} = 
+\frac{1}{\sqrt{\left( p \, \Delta_{x} \right)^{2} + \left( q \, \Delta_{y} \right)^{2} + \Delta_{z}^{2}}} \: .
+\label{eq:1_rqp_x_oriented}
+\end{equation}
+For $y$-oriented grids (Figure \ref{fig:regular-grids}), the block indices $q$ and $p$ are 
+defined by equations \ref{eq:q-y-oriented} and 
+\ref{eq:p-y-oriented} and $a^{xx}_{qp}$ can be rewritten as follows:
+\begin{equation}
+a^{xx}_{qp} = c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{x} u_{x} \right) \frac{3 \left( q \, \Delta_{x} \right)^{2}}{r_{qp}^{5}} - 
+\frac{1}{r_{qp}^{3}} \: ,
+\label{eq:aqp_xx_y_oriented}
+\end{equation}
+where
+\begin{equation}
+\frac{1}{r_{qp}} = 
+\frac{1}{\sqrt{\left( q \, \Delta_{x} \right)^{2} + \left( p \, \Delta_{y} \right)^{2} + \Delta_{z}^{2}}} \: .
+\label{eq:1_rqp_y_oriented}
+\end{equation}
+From equations \ref{eq:aqp_xx_x_oriented}--\ref{eq:1_rqp_y_oriented}, we can easily verify that
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xx}}^{q} = \mathbf{A}_{\boldsymbol{xx}}^{(-q)}
+\label{eq:Axx_q_external_block_symmetry}
+\end{equation}
+and
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xx}}^{q} = \left(\mathbf{A}_{\boldsymbol{xx}}^{q} \right)^{\top} \: .
+\label{eq:Axx_q_internal_block_symmetry}
+\end{equation}
+Note that these symmetries are valid for 
+any grid orientation.
+From this results we conclude the matrix component 
+$\mathbf{A}_{\boldsymbol{xx}}$ is \textit{symmetric-Block-Toeplitz symmetric-Toeplitz-Block} 
+for any grid orientation.
+The same reasoning can be used to show that matrices $\mathbf{A}_{\boldsymbol{yy}}$ and
+$\mathbf{A}_{\boldsymbol{zz}}$ also have this symmetric structure.
+
+%==========================================================
+\subsection{Detailed structure of matrix $\mathbf{A_{xy}}$}
+%==========================================================
+
+Let $\mathbf{A}_{\boldsymbol{xy}}$ be a matrix component with elements
+$a^{xy}_{ij}$ (equation \ref{eq:aij_alpha_beta}) defined by the second derivative calculated in
+$h^{xy}_{ij}$ (equation \ref{eq:hxy_regular}). It can be easily verified from equations
+\ref{eq:Delta_kij_symmetry}--\ref{eq:1_rij_symmetry} that $h^{xy}_{ij} = h^{xy}_{ji}$.
+As a consequence, $a^{xy}_{ij} = a^{xy}_{ji}$, which means that 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xy}} = \left( \mathbf{A}_{\boldsymbol{xy}} \right)^{\top}
+\label{eq:Axy_symmetry}
+\end{equation}
+for any grid orientation.
+For $x$-oriented grids (Figure \ref{fig:regular-grids}), the block indices $q$ and $p$ are defined 
+by equations \ref{eq:q-x-oriented} and 
+\ref{eq:p-x-oriented} and $a^{xy}_{qp}$ can be rewritten as follows:
+\begin{equation}
+a^{xy}_{qp} = c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{x} u_{y} + F_{y} u_{x} \right) \frac{3 \left( p \, \Delta_{x} \right)\left( q \, \Delta_{y} \right)}{r_{qp}^{5}}
+\: ,
+\label{eq:aqp_xy_x_oriented}
+\end{equation}
+with $\tfrac{1}{r_{qp}}$ defined by equation \ref{eq:1_rqp_x_oriented}.
+For $y$-oriented grids (Figure \ref{fig:regular-grids}), the block indices $q$ and $p$ are 
+defined by equations \ref{eq:q-y-oriented} and 
+\ref{eq:p-y-oriented} and $a^{xy}_{qp}$ can be rewritten as follows:
+\begin{equation}
+a^{xy}_{qp} = c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{x} u_{y} + F_{y} u_{x} \right) \frac{3 \left( q \, \Delta_{x} \right)\left( p \, \Delta_{y} \right)}{r_{qp}^{5}} \: ,
+\label{eq:aqp_xy_y_oriented}
+\end{equation}
+with $\tfrac{1}{r_{qp}}$ defined by equation \ref{eq:1_rqp_y_oriented}.
+From equations \ref{eq:1_rqp_x_oriented}, \ref{eq:1_rqp_y_oriented}, \ref{eq:aqp_xy_x_oriented} 
+and \ref{eq:aqp_xy_y_oriented}, we can show that
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xy}}^{q} = -\mathbf{A}_{\boldsymbol{xy}}^{(-q)}
+\label{eq:Axy_q_external_block_symmetry}
+\end{equation}
+and 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xy}}^{q} = -\left( \mathbf{A}_{\boldsymbol{xy}}^{q} \right)^{\top} \: .
+\label{eq:Axy_q_internal_block_symmetry}
+\end{equation}
+Note that these symmetries are valid for any grid orientation.
+From this results we conclude the matrix component 
+$\mathbf{A}_{\boldsymbol{xy}}$ is \textit{skew symmetric-Block-Toeplitz skew symmetric-Toeplitz-Block} 
+for any grid orientation.
+
+%==================================================================================
+\subsection{Detailed structure of matrices $\mathbf{A_{xz}}$ and $\mathbf{A_{yz}}$}
+%==================================================================================
+
+Let $\mathbf{A}_{\boldsymbol{xz}}$ be a matrix component with elements
+$a^{xz}_{ij}$ (equation \ref{eq:aij_alpha_beta}) defined by the second derivative calculated in
+$h^{xz}_{ij}$ (equation \ref{eq:hxz_regular}). It can be easily verified from equations
+\ref{eq:Delta_kij_symmetry}--\ref{eq:1_rij_symmetry} that $h^{xz}_{ij} = -h^{xz}_{ji}$.
+As a consequence, $a^{xz}_{ij} = -a^{xz}_{ji}$, which means that 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xz}} = -\left( \mathbf{A}_{\boldsymbol{xz}} \right)^{\top}
+\label{eq:Axz_symmetry}
+\end{equation} 
+for any grid orientation.
+For $x$-oriented grids (Figure \ref{fig:regular-grids}), the block indices $q$ and $p$ are defined 
+by equations \ref{eq:q-x-oriented} and 
+\ref{eq:p-x-oriented} and $a^{xz}_{qp}$ can be rewritten as follows:
+\begin{equation}
+a^{xz}_{qp} = c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{x} u_{z} + F_{z} u_{x} \right) \frac{3 \left( p \, \Delta_{x} \right) \Delta_{z}}{r_{qp}^{5}}
+\: ,
+\label{eq:aqp_xz_x_oriented}
+\end{equation}
+with $\tfrac{1}{r_{qp}}$ defined by equation \ref{eq:1_rqp_x_oriented}.
+In this case, we can see that
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xz}}^{q} = \mathbf{A}_{\boldsymbol{xz}}^{(-q)}
+\label{eq:Axz_q_external_block_symmetry_x_oriented}
+\end{equation}
+and 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xz}}^{q} = -\left( \mathbf{A}_{\boldsymbol{xz}}^{q} \right)^{\top} \: .
+\label{eq:Axz_q_internal_block_symmetry_x_oriented}
+\end{equation}
+This structure is called \textit{symmetric-Block-Toeplitz skew symmetric-Toeplitz-Block} and is 
+valid only for $x$-oriented grids.
+For $y$-oriented grids (Figure \ref{fig:regular-grids}), the block indices $q$ and $p$ are 
+defined by equations \ref{eq:q-y-oriented} and 
+\ref{eq:p-y-oriented} and $a^{xz}_{qp}$ can be rewritten as follows:
+\begin{equation}
+a^{xz}_{qp} = c_{m} \, \frac{\mu_{0}}{4\pi} 
+\left( F_{x} u_{z} + F_{z} u_{x} \right) \frac{3 \left( q \, \Delta_{x} \right) \Delta_{z}}{r_{qp}^{5}} \: ,
+\label{eq:aqp_xz_y_oriented}
+\end{equation}
+with $\tfrac{1}{r_{qp}}$ defined by equation \ref{eq:1_rqp_y_oriented}.
+Now, we conclude that
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xz}}^{q} = -\mathbf{A}_{\boldsymbol{xz}}^{(-q)}
+\label{eq:Axz_q_external_block_symmetry_y_oriented}
+\end{equation}
+and 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{xz}}^{q} = \left( \mathbf{A}_{\boldsymbol{xz}}^{q} \right)^{\top} \: .
+\label{eq:Axz_q_internal_block_symmetry_y_oriented}
+\end{equation}
+This structure is called \textit{skew symmetric-Block-Toeplitz symmetric-Toeplitz-Block} and is 
+valid only for $y$-oriented grids.
+
+The same reasoning can be followed to show that
+\begin{equation}
+\mathbf{A}_{\boldsymbol{yz}} = -\left( \mathbf{A}_{\boldsymbol{yz}} \right)^{\top}
+\label{eq:Ayz_symmetry}
+\end{equation} 
+for any grid orientation. Besides, we can also show that
+\begin{equation}
+\mathbf{A}_{\boldsymbol{yz}}^{q} = -\mathbf{A}_{\boldsymbol{yz}}^{(-q)}
+\label{eq:Ayz_q_external_block_symmetry_x_oriented}
+\end{equation}
+and 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{yz}}^{q} = \left( \mathbf{A}_{\boldsymbol{yz}}^{q} \right)^{\top}
+\label{eq:Ayz_q_internal_block_symmetry_x_oriented}
+\end{equation}
+for $x$-oriented grids (\textit{skew symmetric-Block-Toeplitz symmetric-Toeplitz-Block}), while
+\begin{equation}
+\mathbf{A}_{\boldsymbol{yz}}^{q} = \mathbf{A}_{\boldsymbol{yz}}^{(-q)}
+\label{eq:Ayz_q_external_block_symmetry_y_oriented}
+\end{equation}
+and 
+\begin{equation}
+\mathbf{A}_{\boldsymbol{yz}}^{q} = -\left( \mathbf{A}_{\boldsymbol{yz}}^{q} \right)^{\top}
+\label{eq:Ayz_q_internal_block_symmetry_y_oriented}
+\end{equation}
+for $y$-oriented grids (\textit{symmetric-Block-Toeplitz skew symmetric-Toeplitz-Block}).
+
+%======================================================================================
+%\subsection{Standard Conjugate Gradient Least Squares (CGLS) method}
+\subsection{Convolutional equivalent layer}
+%======================================================================================
+
+The computational cost associated with the classical method to estimate the parameter 
+vector $\mathbf{p}$ by solving the linear system \ref{eq:normal-equations} can be very high 
+or even prohibitive when dealing with large data sets. In these cases, a well-known alternative
+is solving the normal equations (equation \ref{eq:normal-equations}) iteratively by 
+using the \textit{standard Conjugate Gradient Least Squares (CGLS) method}:
+
+\begin{algorithm}[H]
+	Input: $\mathbf{A}$ and $\mathbf{d}^{o}$.
+	
+	Output: Estimated parameter vector $\tilde{\mathbf{p}}$.
+	
+	Set $it = 0$, $\tilde{\mathbf{p}}_{(it)} = \mathbf{0}$, $\mathbf{c}_{(it-1)} = \mathbf{0}$, $\beta_{(it)} = 0$, $\mathbf{s}_{(it)} = \mathbf{d}^{o}$ and $\mathbf{r}_{(it)} = \mathbf{A}^{\top} \mathbf{s}_{(it)}$.
+	
+	1 - If $it > 0$, $\beta_{(it)} = \dfrac{\| \mathbf{r}_{(it)} \|_{2}^{2}}{\| \mathbf{r}_{(it - 1)} \|_{2}^{2}}$
+	
+	2 - $\mathbf{c}_{(it)} = \mathbf{r}_{(it)} + \beta_{(it)} \, \mathbf{c}_{(it - 1)}$
+	
+	3 - $\alpha_{(it)} = \dfrac{{\| \mathbf{r}_{(it)}\|_{2}^{2}}}{\| \mathbf{A} \, \mathbf{c}_{(it)} \|_{2}^{2}}$
+	
+	4 - $\tilde{\mathbf{p}}_{(it + 1)} = \tilde{\mathbf{p}}_{(it)} + \alpha_{(it)} \, \mathbf{c}_{(it)}$
+	
+	5 - $\mathbf{s}_{(it + 1)} = \mathbf{s}_{(it)} - \alpha_{(it)} \, \mathbf{A} \, \mathbf{c}_{(it)}$
+	
+	6 - $\mathbf{r}_{(it + 1)} = \mathbf{A}^{\top} \, \mathbf{s}_{(it + 1)}$
+	
+	7 - $it = it + 1$
+	
+	8 - Repeat previous steps until convergence ($\delta$).
+	
+	\caption{Standard CGLS pseudocode \citep[][ p. 166]{aster2019parameter}.}
+\label{al:std-cgls-algorithm}
+\end{algorithm}
+
+Setting a convergence criterion $\delta$ (Algorithm \ref{al:std-cgls-algorithm}) based on the minimum tolerance 
+of the residuals is a good option to carry out this algorithm efficiently and still obtaining very good results. 
+Another possibility is to set an invariance to the Euclidean norm of residuals between 
+iterations, which would increase algorithm runtime, but with smaller residuals. 
+We chose the latter option, as we could achieve better results.
+
+Note that the standard CGLS solution (Algorithm \ref{al:std-cgls-algorithm}) requires 
+neither inverse matrix nor matrix-matrix product. Instead, it only requires: one matrix-vector 
+product out of the loop and two matrix-vector products per iteration (in steps 3 and 6). 
+These products can be efficiently computed by using the 2D FFT, as a discrete convolution
+(see Appendix A). \citet{takahashi2020convolutional} used this approach
+to develop an efficient algorithm for gravity data processing. This modified approach in which
+the standard CGLS method is modified to efficiently compute the matrix-vector products will be 
+referenced throughout this work as the \textit{convolutional equivalent layer method}.
+
+%======================================================================================
+\subsection{Computational performance}
+%======================================================================================
+
+In this section we compare the efficiency of the classical (equation \ref{eq:classical-method}), 
+standard CGLS (Algorithm \ref{al:std-cgls-algorithm}) and the convolutional equivalent 
+layer method (Algorithm \ref{al:std-cgls-algorithm} with matrix-vector products computed 
+according to Appendix A). To do this, we compute the total number of 
+\textit{flops} associated to them \citep[][ p. 12]{golub-vanloan2013}.
+
+For the classical method, we have $\tfrac{1}{2} N^3$ flops to compute the lower triangle of
+$\mathbf{A}^{\top}\mathbf{A}$; $\tfrac{1}{3} N^3$ flops to compute the Cholesky factor
+$\mathbf{G}$ of $\mathbf{A}^{\top}\mathbf{A}$ \citep[][ p.~164]{golub-vanloan2013};
+$2 \, N^2$ flops to compute the matrix-vector product $\mathbf{A}^{\top} \mathbf{d}^{o}$;
+and $2 \, N^2$ flops to solve the triangular systems given by equation \ref{eq:classical-method}
+\citep[][ p.~106]{golub-vanloan2013}. The resultant flop count for the classical method is
+\begin{equation}
+f_{classical} =  \dfrac{5}{6} N^{3} + 4 \, N^{2}\: .
+\label{eq:flops-classical-method}
+\end{equation}
+
+%======================================================================================
+%\subsection{CGLS flops count}
+%======================================================================================
+
+For the standard CGLS method (Algorithm \ref{al:std-cgls-algorithm}) we have $2 \, N^2$ to compute
+the matrix-vector product $\mathbf{A}^{\top} \mathbf{s}_{(it)}$ out of the loop;
+$4 \, N$ in step 1; $2 \, N$ in step 2; $2 \, N^2 + 2 \, N$ in step 3; $2 \, N$ in step 4;
+$2 \, N$ in step 5; and $2 \, N^2$ in step 6. The resultant flop count is given by:
+\begin{equation}
+f_{cgls} =  2 N^{2} + it \, (4 N^{2} + 12 N) \: .
+\label{eq:flops-standard-cgls}
+\end{equation}
+
+%======================================================================================
+%\subsection{Our modified CGLS flops count}
+%======================================================================================
+
+To compute the flops count of our method, we need only to replace the flops associated with 
+matrix-vector products in the standard CGLS method by those associated with
+2D convolution defined in Appendix A, which consists of $\kappa  \, 4 N \log_2(4N)$ flops to
+compute the 2D FFT for each matrix $\mathbf{L}_{\boldsymbol{\alpha\beta}}$ (equation 
+\ref{eq:L_alpha_beta}); $\kappa  \, 4 N \log_2(4N)$ flops to compute 
+$\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P}$ via 2D FFT; $24 \, N$ flops to compute the 
+Hadamard product $\mathbf{L} \circ \left(\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right)$; 
+and $\kappa  \, 4 N \log_2(4N)$ flops to compute the IDFT (inverse discrete Fourier transform) in equation 
+\ref{eq:2d-discrete-convolution-complete}. We use $\kappa = 5$ for the \emph{radix-2} algorithm
+\citep[][ p.~15]{vanloan1992}. By replacing these flops into Algorithm \ref{al:std-cgls-algorithm},
+we obtain the complete number of flops
+\begin{equation}
+f_{conv} =  \kappa  \, 16 N \log_2(4 N) + 24 N + it \, (\kappa  \, 16 N \log_2 (4 N) + 60 N) \: .
+\label{eq:flops-convolutional-method}
+\end{equation}
+
+Figure \ref{fig:flops} shows a comparison between 
+$f_{classical}$ (equation \ref{eq:flops-classical-method}), 
+$f_{cgls}$ (equation \ref{eq:flops-standard-cgls}) and 
+$f_{conv}$ (equation \ref{eq:flops-convolutional-method})
+for different numbers of observation points up to $1,000,000$. As we can see, 
+the total flops count associated with our method is $7$ orders of magnitude smaller 
+than that associated with the classical method and $3$ orders of magnitude smaller than
+that associated with the standard CGLS method when using a maximum number
+of iterations $N^{it} = 50$. 
+
+Figure \ref{fig:solve_time} shows the time necessary to build matrix $\mathbf{A}$ 
+(equation \ref{eq:A_expand}) and solve the linear system for $N$ varying up to $10,000$. 
+With $N = 10,000$, the classical method takes more than sixty-three seconds, the standard 
+CGLS more than twelve seconds, while our method takes only half a second. 
+The CPU used for this test was a Intel Core i7-7700HQ@2.8GHz.
+
+%In Figure \ref{fig:sources_time} a comparison between the time to complete the task to calculate the first column of the BCCB matrix embbeded from the from $\mathbf{A}$ (equation \ref{eq:aij_mag}) by using only one equivalent source, i.e., calculating all six first column of the second derivatives matrices from $\mathbf{H}$ (equation \ref{eq:Hi}) and using four equivalent sources to calculate the four necessary columns from the non-symmetric matrix $\mathbf{A}$ (equation \ref{eq:aij_mag}). Although, very similar in time, with one source a small advantage can be observed as the number of data $N$ increases and goes beyond $N = 200,000$. This test was done from $N = 10,000$ to $N = 700,000$ with increases of $5,625$ observation points.
+
+Table \ref{tab:RAM-usage} shows a comparison between the RAM memory storage 
+associated with each method. In the classical and standard CGLS methods, the whole 
+matrix $\mathbf{A}$ (equation \ref{eq:A_expand}) has to be stored. For example, a dataset with 
+$N = 10,000$ observation points has an associated sensitivity matrix $\mathbf{A}$ formed by 
+$N^2 = 100,000,000$ elements and takes approximately $763$ Megabytes of memory (8 bytes per element). 
+Using the same number of observation points $N = 10,000$, our method requires only 
+$1.831$ Megabytes to store the first columns of the BCCB matrices
+$\mathbf{C}_{\boldsymbol{\alpha\beta}}$ (equation \ref{eq:w_alpha_beta}) and 
+$0.6104$ Megabytes to store the complex matrix $\mathbf{L}$ (equation \ref{eq:L}) 
+(16 bytes per element). For a bigger dataset with $N = 1,000,000$, the amount of necessary RAM 
+goes to $7,629,395$, $183.096$ and $61.035$ Megabytes, respectively.
